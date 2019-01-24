@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Hello-rust",
+            "cwd": "${workspaceFolder}/hello-rust",
+            "cargo": {
+                "args": ["run"], // Cargo command line to build the debug target
+                // "args": ["build", "--bin=foo"] is another possibility
+                "filter": {
+                    "kind": "bin"
+                }
+            },
+            "preLaunchTask": "cd hello-rust"
+        }
+    ]
+}
