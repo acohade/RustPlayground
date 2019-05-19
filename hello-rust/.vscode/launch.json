@@ -15,7 +15,7 @@
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "build debug",
             "environment": [],
-            "externalConsole": true
+            "externalConsole": false
         },
         {
             "name": "Release",
@@ -27,7 +27,7 @@
             "preLaunchTask": "build release",
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": true
+            "externalConsole": false
         }
     ]
 }
