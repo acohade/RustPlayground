@@ -13,7 +13,7 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build debug",
             "environment": [],
             "externalConsole": true
         },
@@ -21,9 +21,10 @@
             "name": "Release",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/target/debug/hello-rust.exe",
+            "program": "${workspaceRoot}/target/release/hello-rust.exe",
             "args": [],
             "stopAtEntry": false,
+            "preLaunchTask": "build release",
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": true
