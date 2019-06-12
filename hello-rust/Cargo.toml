@@ -5,4 +5,3 @@ authors = ["Antoine Cohade <antoine.cohade@intel.com>"]
 edition = "2018"
 
 [dependencies]
-ferris-says = "0.1" 
