@@ -14,6 +14,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "build debug",
+            "postDebugTask": "open image",
             "environment": [],
             "externalConsole": false
         },
@@ -25,6 +26,7 @@
             "args": [],
             "stopAtEntry": false,
             "preLaunchTask": "build release",
+            "postDebugTask": "open image",
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false

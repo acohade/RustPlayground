@@ -36,6 +36,21 @@
             // Use the standard MS compiler pattern to detect errors, warnings and infos
             "problemMatcher": "$msCompile"
         }, 
+        {
+            "label": "open image",
+            "type": "process",
+            "windows": {
+                "command": "..\\tools\\OpenSeeIt.exe"
+            },
+            "args": [
+                // Ask msbuild to generate full paths for file names.
+                "image.ppm"
+            ],
+            "presentation": {
+                // Reveal the output only if unrecognized errors occur.
+                "reveal": "always"
+            },
+        }, 
 
     ]
 }
