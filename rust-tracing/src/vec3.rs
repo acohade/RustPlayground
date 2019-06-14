@@ -4,6 +4,7 @@ use std:: { f32,
 use core::ops;
 
 // declaring vec
+#[derive(Copy, Clone, Default)]
 pub struct Vec3 { 
     pub x: f32,
     pub y: f32, 
@@ -17,24 +18,28 @@ impl fmt::Display for Vec3{
     }
 }
 
-fn dot(v1 : &Vec3, v: &Vec3) -> f32 {
+pub fn dot(v1 : &Vec3, v: &Vec3) -> f32 {
         v1.x * v.x + 
         v1.y * v.y + 
         v1.z * v.z 
 }
 
-fn cross(v1 : &Vec3, v2: &Vec3) -> Vec3 {
+pub fn cross(v1 : &Vec3, v2: &Vec3) -> Vec3 {
         Vec3 {  x : v1.y * v2.z - v1.z * v2.y,
                 y : v1.z * v2.x - v1.x * v2.z,
                 z : v1.x * v2.y - v1.y * v2.x}
 }
 
-fn unit_vector(v: &Vec3) -> Vec3 {
+pub fn unit_vector(v: &Vec3) -> Vec3 {
         let k = 1. / v.len();
-        Vec3 {  x: v.x / k, 
-                y: v.y / k, 
-                z: v.z / k}
+        Vec3 {  x: v.x * k, 
+                y: v.y * k, 
+                z: v.z * k}
     }
+
+pub fn lerp(v1 : &Vec3, v2: &Vec3, t: f32) -> Vec3 {
+    (1.0 - t) * *v1 + t * *v2
+}
 
 impl Vec3{ 
 
@@ -55,6 +60,16 @@ impl Vec3{
             z: 0.0
         }
     }
+
+    pub fn new(x_in: f32, y_in: f32, z_in: f32) -> Vec3 {
+        Vec3
+        {
+            x:x_in,
+            y:y_in, 
+            z:z_in
+        }
+    }
+
 
     pub fn len(&self) -> f32 {
         (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
