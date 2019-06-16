@@ -17,14 +17,12 @@ use crate::ray::Ray;
 use crate::scene::{world::*,camera::*};
 use crate::geometry::HitRecord;
 
-
-
-
-fn compute_color(r: Ray, s: &World) -> Vec3 { 
+fn compute_color(r: Ray, w: &World) -> Vec3 { 
     let mut rec = HitRecord { t: 0., hit_point: Vec3::zero(), normal: Vec3::zero()} ;
     let rec = &mut rec;
-    if s.hit(&r, 0.0, F32_MAX, rec) {
-        return 0.5 * (rec.normal + 1.);
+    if w.hit(&r, 0.000, F32_MAX, rec) {
+        let bounce_vector = rec.hit_point + rec.normal + Vec3::random_in_unit_sphere();
+        return 0.5 * compute_color ( Ray{origin : rec.hit_point, direction: bounce_vector - rec.hit_point}, w);
     }
     let unit_direction = vec3::unit_vector(&r.direction);
     let t = 0.5 *( unit_direction.y + 1.0);
@@ -52,7 +50,8 @@ fn create_image()-> io::Result<()> {
                 let r = camera.get_ray(u,v);
                 color += compute_color(r, &world);
             }
-            let color = 255.99 * color / ray_per_pixel as f32;
+            let color = color / ray_per_pixel as f32;
+            let color = 255.99 * color.gamma_2_correct_simple_appx();
             write!(&mut writer,"{} {} {} \n", color.x as i32, color.y as i32, color.z as i32)?;
         }
         writeln!(&mut writer)?;  

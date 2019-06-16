@@ -2,6 +2,7 @@ use std:: { f32,
             fmt };
 
 use core::ops;
+use rand::Rng;
 
 // declaring vec
 #[derive(Copy, Clone, Default)]
@@ -60,6 +61,26 @@ impl Vec3{
             z: 0.0
         }
     }
+    // random vector in unit cube
+    pub fn random() -> Vec3 {
+        let mut rng = rand::thread_rng();
+        Vec3 {
+            x: rng.gen(),
+            y: rng.gen(), 
+            z: rng.gen()
+        } * 2. - 1. 
+    }
+
+    // random vector in unit sphere 
+    pub fn random_in_unit_sphere() -> Vec3 {
+        // generate random in unit cube until it's in unit sphere
+        let mut random_vector;
+        loop {
+            random_vector = Vec3::random();
+            if random_vector.len() < 1. { break; }
+        }
+        random_vector
+    }
 
     pub fn new(x_in: f32, y_in: f32, z_in: f32) -> Vec3 {
         Vec3
@@ -89,6 +110,15 @@ impl Vec3{
 
     pub fn cross(&self, v: &Vec3) -> Vec3 {
         cross(&self, &v)
+    }
+
+    pub fn gamma_2_correct_simple_appx(&self) -> Vec3 {
+        Vec3
+            {
+                x : self.x.sqrt(),
+                y : self.y.sqrt(), 
+                z : self.z.sqrt()
+            }
     }
 
 }

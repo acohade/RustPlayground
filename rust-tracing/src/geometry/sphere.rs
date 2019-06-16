@@ -2,6 +2,7 @@ use crate::vec3::*;
 use crate::ray::Ray;
 use crate::geometry::HitRecord;
 
+
 pub struct Sphere {
     pub radius : f32, 
     pub center : Vec3
@@ -11,6 +12,8 @@ impl Sphere {
     pub fn new(c: &Vec3, r: f32) -> Sphere {
         Sphere { radius: r, center: *c}
     }
+
+
 
     pub fn hit(&self,r: &Ray, t_min : f32, t_max : f32, hit_record : &mut HitRecord) -> bool {
         let oc = r.origin - self.center;
