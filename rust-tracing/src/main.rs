@@ -15,9 +15,9 @@ use crate::geometry::HitRecord;
 
 
 fn color(r: Ray, s: &Scene) -> Vec3 { 
-    let mut rec : HitRecord = HitRecord { t: 0., hit_point: Vec3::zero(),normal: Vec3::zero()} ;
+    let mut rec = HitRecord { t: 0., hit_point: Vec3::zero(), normal: Vec3::zero()} ;
     let rec = &mut rec;
-    if s.hit(&r, 0.0, 9999., rec) {
+    if s.hit(&r, 0.0, 9999999., rec) {
         return 0.5 * (rec.normal + 1.);
     }
     let unit_direction = vec3::unit_vector(&r.direction);
@@ -31,7 +31,7 @@ fn create_image()-> io::Result<()> {
     let ny = 100;
     let camera_position = Vec3::zero();
     let lower_left_corner = Vec3::new( -2.0, -1.0, -1.0 );
-    let vertical = Vec3::new( 0., 2.0, 0.0 );
+    let vertical = Vec3::new( 0.0, 2.0, 0.0 );
     let horizontal = Vec3::new( 4.0, 0.0, 0.0 );
     let world = Scene::new(2);
 

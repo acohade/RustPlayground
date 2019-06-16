@@ -13,8 +13,8 @@ pub struct Scene {
 impl Scene {
     pub fn new(list_size: i32) -> Scene {
         let mut list : Vec<Sphere> = Vec::with_capacity(2);
-        list.push(Sphere::new( &Vec3::new( 0. ,0. , -1. ), 0.5));
-        list.push(Sphere::new( &Vec3::new( 0. ,-100.5 , -1. ), 100.));
+        list.push(Sphere::new( &Vec3::new( 0., 0., -1. ), 0.5));
+        list.push(Sphere::new( &Vec3::new( 0., -100.5, -1. ), 100.));
         Scene { objects : list }
     }
 
