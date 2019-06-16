@@ -1,23 +1,29 @@
+extern crate rand;
+
 //std includes
 use std::fs::File;
 use std::io::{self, BufWriter, prelude::*};
+use rand::Rng;
 //local includes
 mod ray;
 pub mod vec3;
 pub mod geometry;
 pub mod scene;
 
+pub const F32_MAX : f32 = std::f32::MAX;
+
 use crate::vec3::Vec3;
 use crate::ray::Ray;
-use crate::scene::Scene;
+use crate::scene::{world::*,camera::*};
 use crate::geometry::HitRecord;
 
 
 
-fn color(r: Ray, s: &Scene) -> Vec3 { 
+
+fn compute_color(r: Ray, s: &World) -> Vec3 { 
     let mut rec = HitRecord { t: 0., hit_point: Vec3::zero(), normal: Vec3::zero()} ;
     let rec = &mut rec;
-    if s.hit(&r, 0.0, 9999999., rec) {
+    if s.hit(&r, 0.0, F32_MAX, rec) {
         return 0.5 * (rec.normal + 1.);
     }
     let unit_direction = vec3::unit_vector(&r.direction);
@@ -26,26 +32,27 @@ fn color(r: Ray, s: &Scene) -> Vec3 {
 }
 
 fn create_image()-> io::Result<()> {
-
+    let mut rng = rand::thread_rng();
     let nx = 200; 
     let ny = 100;
-    let camera_position = Vec3::zero();
-    let lower_left_corner = Vec3::new( -2.0, -1.0, -1.0 );
-    let vertical = Vec3::new( 0.0, 2.0, 0.0 );
-    let horizontal = Vec3::new( 4.0, 0.0, 0.0 );
-    let world = Scene::new(2);
+    let ray_per_pixel = 100;
 
+    let world = World::new(2);
+    let camera = Camera::new();
     let write_file = File::create("image.ppm")?;
     let mut writer = BufWriter::new(&write_file);
     write!(&mut writer,"P3\n{} {}\n255\n",nx,ny)?;
 
     for j in (0..ny).rev() {
         for i in 0..nx {
-            let u : f32 = i as f32 / nx as f32;
-            let v : f32 = j as f32 / ny as f32;
-            let r : Ray = Ray::new(camera_position, lower_left_corner + u * horizontal + v * vertical);
-            let color = color(r, &world);
-            let color = 255.99 * color;
+            let mut color = Vec3::zero();
+            for _k in 0..ray_per_pixel {
+                let u : f32 = (rng.gen::<f32>() + i as f32) / nx as f32;
+                let v : f32 = (rng.gen::<f32>() + j as f32) / ny as f32;
+                let r = camera.get_ray(u,v);
+                color += compute_color(r, &world);
+            }
+            let color = 255.99 * color / ray_per_pixel as f32;
             write!(&mut writer,"{} {} {} \n", color.x as i32, color.y as i32, color.z as i32)?;
         }
         writeln!(&mut writer)?;  

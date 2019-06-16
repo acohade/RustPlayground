@@ -6,16 +6,16 @@ use crate::geometry::{
 use crate::ray::Ray;
 use crate::vec3::Vec3;
 
-pub struct Scene {
+pub struct World {
     objects: Vec<Sphere>
 }
 
-impl Scene {
-    pub fn new(list_size: i32) -> Scene {
+impl World {
+    pub fn new(list_size: i32) -> World {
         let mut list : Vec<Sphere> = Vec::with_capacity(2);
         list.push(Sphere::new( &Vec3::new( 0., 0., -1. ), 0.5));
         list.push(Sphere::new( &Vec3::new( 0., -100.5, -1. ), 100.));
-        Scene { objects : list }
+        World { objects : list }
     }
 
     pub fn hit(&self, r : &Ray, t_min : f32, t_max : f32 ,  rec : &mut HitRecord) -> bool{
