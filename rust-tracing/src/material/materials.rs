@@ -21,7 +21,9 @@ impl Material for Lambertian {
     }
 
     fn clone_boxed(&self) -> Box<Material>{
-        Box::new(Lambertian {albedo : self.albedo})
+        Box::new(Lambertian {
+            albedo : self.albedo
+            })
      }
 }
 
@@ -30,12 +32,14 @@ fn reflect( v : &Vec3, normal : & Vec3) -> Vec3{
 }
 
 pub struct Metal {
-    pub albedo : Vec3
+    pub albedo : Vec3,
+    pub roughness : f32
 }
 
 impl Material for Metal {
     fn scatter(&self, ray_in: &Ray, hit_record : &HitRecord, attenuation : &mut Vec3, ray_out : &mut Ray ) -> bool {
-        let reflected = reflect(&ray_in.direction.unit_vector(), &hit_record.normal); 
+        let perfect_reflection = reflect(&ray_in.direction.unit_vector(), &hit_record.normal);
+        let reflected = (Vec3::random() * self.roughness) + perfect_reflection;
         ray_out.origin = hit_record.hit_point;
         ray_out.direction = reflected;
         *attenuation = self.albedo; // question to rustacean - is it good practive to use * to set a value ? 
@@ -43,6 +47,9 @@ impl Material for Metal {
     }
     
     fn clone_boxed(&self) -> Box<Material>{
-        Box::new(Metal {albedo : self.albedo})
+        Box::new(Metal { 
+            albedo : self.albedo, 
+            roughness: self.roughness
+        })
      }
 }
