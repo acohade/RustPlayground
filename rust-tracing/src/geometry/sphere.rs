@@ -1,19 +1,20 @@
 use crate::vec3::*;
 use crate::ray::Ray;
 use crate::geometry::HitRecord;
+use crate::material::*;
 
 
 pub struct Sphere {
     pub radius : f32, 
-    pub center : Vec3
+    pub center : Vec3,
+    pub mat : Box<materials::Material>
 }
 
 impl Sphere {
-    pub fn new(c: &Vec3, r: f32) -> Sphere {
-        Sphere { radius: r, center: *c}
+    
+    pub fn new(c: &Vec3, r: f32, m: Box<materials::Material>) -> Sphere {
+        Sphere { radius: r, center: *c, mat: m}
     }
-
-
 
     pub fn hit(&self,r: &Ray, t_min : f32, t_max : f32, hit_record : &mut HitRecord) -> bool {
         let oc = r.origin - self.center;
@@ -35,6 +36,7 @@ impl Sphere {
                 hit_record.t = temp;
                 hit_record.hit_point = r.point_at_parameter(hit_record.t);
                 hit_record.normal = (hit_record.hit_point - self.center)/ self.radius;
+                hit_record.mat = self.mat.clone_boxed();
                 return true;
             }
             let temp = (-b + discriminant.sqrt()) / a;
@@ -42,6 +44,7 @@ impl Sphere {
                 hit_record.t = temp;
                 hit_record.hit_point = r.point_at_parameter(hit_record.t);
                 hit_record.normal = (hit_record.hit_point - self.center) / self.radius;
+                hit_record.mat = self.mat.clone_boxed();
                 return true;
             }
         }

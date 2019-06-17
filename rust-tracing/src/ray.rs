@@ -11,6 +11,10 @@ impl Ray {
         Ray{ origin: v1, direction: v2}
     }
 
+    pub fn zero() -> Ray {
+        Ray{ origin: Vec3::zero(), direction: Vec3::zero()}
+    }
+
     pub fn point_at_parameter(&self, t : f32) -> Vec3 {
         self.origin + t * self.direction
     }

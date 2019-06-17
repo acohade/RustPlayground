@@ -9,6 +9,7 @@ mod ray;
 pub mod vec3;
 pub mod geometry;
 pub mod scene;
+pub mod material;
 
 pub const F32_MAX : f32 = std::f32::MAX;
 
@@ -16,13 +17,21 @@ use crate::vec3::Vec3;
 use crate::ray::Ray;
 use crate::scene::{world::*,camera::*};
 use crate::geometry::HitRecord;
+use crate::material::materials;
 
 fn compute_color(r: Ray, w: &World) -> Vec3 { 
-    let mut rec = HitRecord { t: 0., hit_point: Vec3::zero(), normal: Vec3::zero()} ;
-    let rec = &mut rec;
-    if w.hit(&r, 0.000, F32_MAX, rec) {
-        let bounce_vector = rec.hit_point + rec.normal + Vec3::random_in_unit_sphere();
-        return 0.5 * compute_color ( Ray{origin : rec.hit_point, direction: bounce_vector - rec.hit_point}, w);
+    let rec = &mut HitRecord { t: 0., hit_point: Vec3::zero(), normal: Vec3::zero(), mat : Box::new(materials::Lambertian { albedo: Vec3::new(0.1,0.1,0.1)})} ;
+    if w.hit(&r, 0.0001, F32_MAX, rec) {
+        let mut ray_out = Ray::zero();
+        let ray = &mut ray_out;
+        let attenuation = &mut Vec3::zero();
+        if rec.mat.scatter(&r,rec, attenuation, ray) {
+            let ray_out = ray_out;
+            return *attenuation * compute_color(ray_out,w);
+
+        } else {
+            return Vec3::new (0.0,0.0,0.0);
+        }
     }
     let unit_direction = vec3::unit_vector(&r.direction);
     let t = 0.5 *( unit_direction.y + 1.0);

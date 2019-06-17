@@ -98,9 +98,18 @@ impl Vec3{
 
     pub fn sq_len(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
+    }
+
+    pub fn unit_vector(&self) -> Vec3 {
+        let len = self.len();
+        Vec3 {
+            x: self.x / len,
+            y: self.y / len,
+            z: self.z / len,
+        }
     }    
 
-    pub fn make_unique_vector(&mut self) {
+    pub fn make_unit_vector(&mut self) {
         *self /= self.len();
     }
 

@@ -1,20 +1,25 @@
 use std::vec::Vec;
+
 use crate::geometry::{
     HitRecord,
     sphere::Sphere
 };
 use crate::ray::Ray;
 use crate::vec3::Vec3;
+use crate::material::materials;
 
 pub struct World {
     objects: Vec<Sphere>
 }
 
 impl World {
-    pub fn new(list_size: i32) -> World {
-        let mut list : Vec<Sphere> = Vec::with_capacity(2);
-        list.push(Sphere::new( &Vec3::new( 0., 0., -1. ), 0.5));
-        list.push(Sphere::new( &Vec3::new( 0., -100.5, -1. ), 100.));
+    pub fn new(_list_size: i32) -> World {
+        let list : Vec<Sphere> = vec! (
+            Sphere::new( &Vec3::new( 0.0, 0.0, -1.0 )   , 0.5   , Box::new(materials::Lambertian    { albedo: Vec3::new( 0.8, 0.3, 0.3 )})),
+            Sphere::new( &Vec3::new( 0.0, -100.5, -1.0) , 100.  , Box::new(materials::Lambertian    { albedo: Vec3::new( 0.8, 0.8, 0.0 )})),
+            Sphere::new( &Vec3::new( 1.0, 0.0, -1.0 )   , 0.5   , Box::new(materials::Metal         { albedo: Vec3::new( 0.8, 0.6, 0.2 )})),
+            Sphere::new( &Vec3::new( -1.0, -0.2, -1.0 ) , 0.3   , Box::new(materials::Metal        { albedo: Vec3::new( 0.8, 0.8, 0.8 )}))
+         );
         World { objects : list }
     }
 
