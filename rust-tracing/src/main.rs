@@ -39,8 +39,8 @@ fn trace_ray(r: Ray, w: &World) -> Vec3 {
 
 fn create_image()-> io::Result<()> {
     let mut rng = rand::thread_rng();
-    let nx = 200; 
-    let ny = 100;
+    let nx = 400; 
+    let ny = 200;
     let ray_per_pixel = 100;
 
     let world = World::new(2);

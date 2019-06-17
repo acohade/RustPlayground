@@ -16,9 +16,12 @@ impl World {
     pub fn new(_list_size: i32) -> World {
         let list : Vec<Sphere> = vec! (
             Sphere::new( &Vec3::new( 0.0, 0.0, -1.0 )   , 0.5   , Box::new(materials::Lambertian    { albedo: Vec3::new( 0.8, 0.3, 0.3 )})),
-            Sphere::new( &Vec3::new( 0.0, -100.5, -1.0) , 100.  , Box::new(materials::Lambertian    { albedo: Vec3::new( 0.8, 0.8, 0.0 )})),
+            Sphere::new( &Vec3::new( 0.0, -100.5, -1.0) , 100.  , Box::new(materials::Lambertian    { albedo: Vec3::new( 0.2, 0.4, 0.6 )})),
             Sphere::new( &Vec3::new( 1.0, 0.0, -1.0 )   , 0.5   , Box::new(materials::Metal         { albedo: Vec3::new( 0.8, 0.6, 0.2 ), roughness: 0.6 })),
-            Sphere::new( &Vec3::new( -1.0, -0.2, -1.0 ) , 0.3   , Box::new(materials::Metal         { albedo: Vec3::new( 0.8, 0.8, 0.8 ), roughness: 0.1 }))
+            Sphere::new( &Vec3::new( -1.0, -0.2, -1.0 ) , 0.3   , Box::new(materials::Metal         { albedo: Vec3::new( 0.8, 0.8, 0.8 ), roughness: 0.1 })),
+            Sphere::new( &Vec3::new( -0.6, -0.4, -0.7 ) , 0.1   , Box::new(materials::Dielectric    { refraction_index : 1.5})),
+            //Sphere::new( &Vec3::new( -1.0, 0.0, -0.8 )  , -0.45 , Box::new(materials::Dielectric    { refraction_index : 1.5})),
+
          );
         World { objects : list }
     }
