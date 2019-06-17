@@ -19,16 +19,15 @@ use crate::scene::{world::*,camera::*};
 use crate::geometry::HitRecord;
 use crate::material::materials;
 
-fn compute_color(r: Ray, w: &World) -> Vec3 { 
+fn trace_ray(r: Ray, w: &World) -> Vec3 { 
     let rec = &mut HitRecord { t: 0., hit_point: Vec3::zero(), normal: Vec3::zero(), mat : Box::new(materials::Lambertian { albedo: Vec3::new(0.1,0.1,0.1)})} ;
     if w.hit(&r, 0.0001, F32_MAX, rec) {
-        let mut ray_out = Ray::zero();
-        let ray = &mut ray_out;
+        let mut ray_out = Ray::zero(); // will be overwritten in any case - do we really need to initialize ?
+        let ray = &mut ray_out; // scatter will modify the ray_out -> need the &mut - but this doesnt look clean to me
         let attenuation = &mut Vec3::zero();
         if rec.mat.scatter(&r,rec, attenuation, ray) {
             let ray_out = ray_out;
-            return *attenuation * compute_color(ray_out,w);
-
+            return *attenuation * trace_ray(ray_out,w);
         } else {
             return Vec3::new (0.0,0.0,0.0);
         }
@@ -57,7 +56,7 @@ fn create_image()-> io::Result<()> {
                 let u : f32 = (rng.gen::<f32>() + i as f32) / nx as f32;
                 let v : f32 = (rng.gen::<f32>() + j as f32) / ny as f32;
                 let r = camera.get_ray(u,v);
-                color += compute_color(r, &world);
+                color += trace_ray(r, &world); 
             }
             let color = color / ray_per_pixel as f32;
             let color = 255.99 * color.gamma_2_correct_simple_appx();

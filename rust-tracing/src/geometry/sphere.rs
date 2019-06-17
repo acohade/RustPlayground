@@ -35,7 +35,7 @@ impl Sphere {
             if temp < t_max && temp > t_min {
                 hit_record.t = temp;
                 hit_record.hit_point = r.point_at_parameter(hit_record.t);
-                hit_record.normal = (hit_record.hit_point - self.center)/ self.radius;
+                hit_record.normal = (hit_record.hit_point - self.center) / self.radius;
                 hit_record.mat = self.mat.clone_boxed();
                 return true;
             }
